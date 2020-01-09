@@ -30,6 +30,7 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
+                implementation(kotlin("test", "1.3.61"))
                 implementation(kotlin("test-junit5", "1.3.61"))
                 implementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.5.2")
@@ -50,14 +51,8 @@ kotlin {
 }
 
 tasks {
-    val compileKotlinJs by getting(Kotlin2JsCompile::class) {
-        kotlinOptions.moduleKind = "umd"
-        kotlinOptions.sourceMap = true
-        kotlinOptions.sourceMapEmbedSources = "always"
-    }
-    val compileTestKotlinJs by getting(Kotlin2JsCompile::class) {
-        kotlinOptions.moduleKind = "commonjs"
-        kotlinOptions.sourceMap = true
-        kotlinOptions.sourceMapEmbedSources = "always"
+    val jvmTest by getting(Test::class) {
+        systemProperty("junit.jupiter.extensions.autodetection.enabled", "true")
+        useJUnitPlatform()
     }
 }
