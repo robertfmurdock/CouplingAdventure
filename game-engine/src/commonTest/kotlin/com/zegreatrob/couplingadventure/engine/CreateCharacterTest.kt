@@ -19,7 +19,8 @@ class CreateCharacterTest {
                 Character(
                         player,
                         people,
-                        heroClass
+                        heroClass,
+                        heroClass.characterSheet
                 )
         )
     }
