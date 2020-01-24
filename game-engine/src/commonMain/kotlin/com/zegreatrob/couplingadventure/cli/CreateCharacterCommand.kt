@@ -2,25 +2,18 @@ package com.zegreatrob.couplingadventure.cli
 
 import com.zegreatrob.couplingadventure.engine.*
 
-data class CreateCharacterCommand(val prompt: String)
+data class CreateCharacterCommand(val name: String, val people: String, val heroClass: String)
 
-interface CreateCharacterCommandDispatcher : InputRequestSyntax, CreateCharacterActionDispatcher {
-    fun CreateCharacterCommand.perform(): GameSetupState {
-        val name = prompt
-                .waitForResponse()
-        val people = waitForResponse()
-        val heroClass = waitForResponse()
+interface CreateCharacterCommandDispatcher : CreateCharacterActionDispatcher {
 
-        "Lovely, welcome $name the $people $heroClass!"
-                .sendToUser()
-
-        return if (name != null && people != null && heroClass != null) {
-            val character = CreateCharacterAction(Player(name), People.valueOf(people), HeroClass.valueOf(heroClass))
-                    .perform()
-            GameSetupState(listOf(character))
-        } else {
-            GameSetupState()
-        }
-
+    fun CreateCharacterCommand.perform() = run {
+        val character = createCharacter(name, people, heroClass)
+        GameSetupState(listOf(character))
     }
+
+    private fun createCharacter(name: String, people: String, heroClass: String) = CreateCharacterAction(
+            Player(name),
+            People.valueOf(people),
+            HeroClass.valueOf(heroClass)
+    ).perform()
 }
