@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
 }
@@ -25,6 +23,7 @@ kotlin {
                 implementation(kotlin("test-annotations-common", "1.3.61"))
                 implementation("com.zegreatrob.testmints:standard:+")
                 implementation("com.zegreatrob.testmints:minassert:+")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.3")
             }
         }
 
@@ -35,6 +34,7 @@ kotlin {
                 implementation(kotlin("test-junit5", "1.3.61"))
                 implementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.5.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
             }
         }
 
