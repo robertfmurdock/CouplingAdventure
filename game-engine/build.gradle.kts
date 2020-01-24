@@ -23,6 +23,7 @@ kotlin {
                 implementation(kotlin("test-annotations-common", "1.3.61"))
                 implementation("com.zegreatrob.testmints:standard:+")
                 implementation("com.zegreatrob.testmints:minassert:+")
+                implementation("com.zegreatrob.testmints:minspy:+")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.3")
             }
         }

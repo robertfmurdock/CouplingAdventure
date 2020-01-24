@@ -7,7 +7,7 @@ import kotlin.test.Test
 class CreateCharacterActionTest {
 
     @Test
-    fun performCreateCharacter() = setup(object : CreateCharacterDispatcher {
+    fun performCreateCharacter() = setup(object : CreateCharacterActionDispatcher {
         val player = Player(name = "Tim")
         val people = People.Dwarf
         val heroClass = HeroClass.Warrior

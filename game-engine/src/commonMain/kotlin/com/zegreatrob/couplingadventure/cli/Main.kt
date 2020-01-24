@@ -9,35 +9,14 @@ fun commandDispatcher(function: MainCommandDispatcher.() -> Unit) {
     commandDispatcher.function()
 }
 
-
 object MainCommand
 
-interface MainCommandDispatcher : OutputSyntax, InputSyntax {
+interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CreatePairCommandDispatcher {
 
     fun MainCommand.perform() {
-        "Welcome to Coupling Adventure!".sendToUser()
-
-        "First, you'll need to identify yourselves. You, on the left... are what is your name?"
+        "Welcome to Coupling Adventure!"
                 .sendToUser()
-
-        val name = readLine()
-        val people = readLine()
-        val heroClass = readLine()
-
-        "Lovely, welcome $name the $people $heroClass!"
-                .sendToUser()
+        CreatePairCommand.perform()
     }
-}
 
-interface InputSyntax {
-    val inputReader: InputReader get() = InputReader
-    fun readLine() = inputReader.readLine()
-}
-
-expect object InputReader {
-    fun readLine(): String?
-}
-
-interface OutputSyntax {
-    fun String.sendToUser() = println(this)
 }
