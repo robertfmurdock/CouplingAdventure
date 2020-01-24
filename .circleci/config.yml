@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: openjdk:13-jdk
+    steps:
+      - checkout
+      - run: "./gradlew check"
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
