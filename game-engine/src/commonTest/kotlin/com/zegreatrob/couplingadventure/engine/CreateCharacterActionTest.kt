@@ -4,7 +4,7 @@ import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.testmints.setup
 import kotlin.test.Test
 
-class CreateCharacterTest {
+class CreateCharacterActionTest {
 
     @Test
     fun performCreateCharacter() = setup(object : CreateCharacterDispatcher {
@@ -12,7 +12,7 @@ class CreateCharacterTest {
         val people = People.Dwarf
         val heroClass = HeroClass.Warrior
     }) exercise {
-        CreateCharacter(player, people, heroClass)
+        CreateCharacterAction(player, people, heroClass)
                 .perform()
     } verify { result ->
         result.assertIsEqualTo(

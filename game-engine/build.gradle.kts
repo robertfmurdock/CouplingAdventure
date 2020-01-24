@@ -30,6 +30,7 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
+                implementation("com.zegreatrob.testmints:async:+")
                 implementation(kotlin("test", "1.3.61"))
                 implementation(kotlin("test-junit5", "1.3.61"))
                 implementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
