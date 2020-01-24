@@ -1,5 +1,9 @@
 package com.zegreatrob.couplingadventure.cli
 
+import com.zegreatrob.couplingadventure.engine.HeroClass
+import com.zegreatrob.couplingadventure.engine.People
+import com.zegreatrob.couplingadventure.engine.Player
+
 object CreatePairCommand
 
 interface CreatePairCommandDispatcher : CreateCharacterCommandDispatcher, InputRequestSyntax {
@@ -11,7 +15,9 @@ interface CreatePairCommandDispatcher : CreateCharacterCommandDispatcher, InputR
 
         "Lovely, welcome $name the $people $heroClass!".sendToUser()
         if (name != null && people != null && heroClass != null) {
-            CreateCharacterCommand(name, people, heroClass).perform()
+            CreateCharacterCommand(Player(name), People.valueOf(people), HeroClass.valueOf(heroClass))
+                    .perform()
         }
     }
 }
+

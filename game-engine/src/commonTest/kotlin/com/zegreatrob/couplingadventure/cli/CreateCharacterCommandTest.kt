@@ -12,19 +12,19 @@ class CreateCharacterCommandTest {
 
     @Test
     fun willUseInputToCreateCharacter() = setup(object : CreateCharacterCommandDispatcher {
-        val givenName = "Tim"
-        val givenPeople = "Human"
-        val givenHeroClass = "Mage"
+        val givenName = Player("Tim")
+        val givenPeople = People.Human
+        val givenHeroClass = HeroClass.Mage
     }) exercise {
         CreateCharacterCommand(givenName, givenPeople, givenHeroClass)
                 .perform()
     } verify { result ->
         result.assertIsEqualTo(
                 GameSetupState(listOf(Character(
-                        Player("Tim"),
-                        People.Human,
-                        HeroClass.Mage,
-                        HeroClass.Mage.characterSheet
+                        givenName,
+                        givenPeople,
+                        givenHeroClass,
+                        givenHeroClass.characterSheet
                 )))
         )
     }
