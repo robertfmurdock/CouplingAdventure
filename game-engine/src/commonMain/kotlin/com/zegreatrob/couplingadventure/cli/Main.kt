@@ -2,6 +2,8 @@ package com.zegreatrob.couplingadventure.cli
 
 import com.zegreatrob.couplingadventure.engine.HeroClass
 import com.zegreatrob.couplingadventure.engine.People
+import com.zegreatrob.couplingadventure.engine.People.valueOf
+import com.zegreatrob.couplingadventure.engine.People.values
 import com.zegreatrob.couplingadventure.engine.Player
 
 fun main() = commandDispatcher {
@@ -29,10 +31,10 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
 
     private fun createCharacterBuilder() = CLICommandBuilder(
             inputRequests = listOf(
-                    "First, you'll need to identify yourselves. You, on the left... are what is your name?",
-                    "And who is your people?",
-                    "Oh, and what is your training?"
-            ).map { InputRequest(it) },
+                    InputRequest("First, you'll need to identify yourselves. You, on the left... are what is your name?"),
+                    InputRequest("And who is your people?", People.values().map(::toPresentationString)),
+                    InputRequest("Oh, and what is your training?", HeroClass.values().map(::toPresentationString))
+            ),
             commandFunction = ::performCreateCharacterCommand
     )
 
@@ -48,10 +50,9 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
 
         return CreateCharacterCommand(
                 Player(name),
-                People.valueOf(people),
+                valueOf(people),
                 HeroClass.valueOf(heroClass)
         ).perform()
     }
-
 
 }
