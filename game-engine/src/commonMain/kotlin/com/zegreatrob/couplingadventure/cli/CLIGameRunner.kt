@@ -24,7 +24,7 @@ interface CLIGameRunnerPerformer : InputRequestSyntax {
                 return null
             }
 
-            index to s.waitForResponse()
+            index to s.ask()
         }.toMap()
         val nonNullValues = responses.values.filterNotNull()
 
@@ -38,6 +38,6 @@ interface CLIGameRunnerPerformer : InputRequestSyntax {
 }
 
 data class CLICommandBuilder(
-        val inputRequests: List<String?>,
+        val inputRequests: List<InputRequest>,
         val commandFunction: (inputs: List<String>) -> GameSetupState
 )

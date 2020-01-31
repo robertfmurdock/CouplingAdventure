@@ -1,6 +1,6 @@
 package com.zegreatrob.couplingadventure.cli
 
-data class InputRequest(val message: String? = null)
+data class InputRequest(val message: String? = null, val options: List<String> = emptyList())
 
 interface InputRequestSyntax : InputSyntax, OutputSyntax, ExitSyntax {
     fun InputRequest.ask() = message?.sendToUser().let {

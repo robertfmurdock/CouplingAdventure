@@ -30,9 +30,9 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
     private fun createCharacterBuilder() = CLICommandBuilder(
             inputRequests = listOf(
                     "First, you'll need to identify yourselves. You, on the left... are what is your name?",
-                    null,
-                    null
-            ),
+                    "And who is your people?",
+                    "Oh, and what is your training?"
+            ).map { InputRequest(it) },
             commandFunction = ::performCreateCharacterCommand
     )
 
