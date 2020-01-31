@@ -48,4 +48,38 @@ class CLIGameRunnerTest {
         askSpy.spyReceivedValues.assertContains(inputRequest)
     }
 
+    @Test
+    fun willUseGameStateFromFirstBuilderToFindNextBuilder() = setup(object : CLIGameRunnerPerformer {
+        override var exitRequested: Boolean = false
+
+        val expectedMiddleState = GameSetupState(listOf(stubCharacter()))
+        val expectedEndState = GameSetupState(listOf(stubCharacter(), stubCharacter()))
+
+        val stateToCommandSpy = SpyData<GameState, CLICommandBuilder?>().apply {
+            whenever(GameSetupState(), CLICommandBuilder(emptyList()) { expectedMiddleState })
+            whenever(expectedMiddleState, CLICommandBuilder(emptyList()) { expectedEndState })
+            whenever(expectedEndState, null)
+        }
+
+        val gamePlan: List<(GameState) -> CLICommandBuilder?> = listOf(
+                stateToCommandSpy::spyFunction,
+                stateToCommandSpy::spyFunction
+        )
+
+        override fun InputRequest.ask() = ""
+
+        val userMessages = mutableListOf<String>()
+        override fun String.sendToUser() = Unit.also { userMessages += this }
+    }) exercise {
+        CLIGameRunner(gamePlan).perform()
+    } verify { result ->
+        result.assertIsEqualTo(expectedEndState)
+
+        stateToCommandSpy.spyReceivedValues
+                .assertIsEqualTo(
+                        listOf(GameSetupState(), expectedMiddleState, expectedEndState, expectedEndState)
+                )
+    }
+
+
 }

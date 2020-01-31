@@ -3,12 +3,9 @@ package com.zegreatrob.couplingadventure.cli
 import com.zegreatrob.couplingadventure.engine.HeroClass
 import com.zegreatrob.couplingadventure.engine.People
 import com.zegreatrob.couplingadventure.engine.People.valueOf
-import com.zegreatrob.couplingadventure.engine.People.values
 import com.zegreatrob.couplingadventure.engine.Player
 
-fun main() = commandDispatcher {
-    MainCommand.perform()
-}
+fun main() = commandDispatcher { MainCommand.perform() }
 
 fun commandDispatcher(function: MainCommandDispatcher.() -> Unit) {
     val commandDispatcher = object : MainCommandDispatcher {
@@ -19,17 +16,19 @@ fun commandDispatcher(function: MainCommandDispatcher.() -> Unit) {
 
 object MainCommand
 
-interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunnerPerformer,
-        CreateCharacterCommandDispatcher {
+interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunnerPerformer, CreateCharacterCommandDispatcher {
 
     val cliGamePlan: List<(GameState) -> CLICommandBuilder?>
         get() = listOf(
                 { state ->
-                    createCharacterBuilder()
+                    when (state) {
+                        GameSetupState() -> createFirstCharacterBuilder()
+                        else -> null
+                    }
                 }
         )
 
-    private fun createCharacterBuilder() = CLICommandBuilder(
+    private fun createFirstCharacterBuilder() = CLICommandBuilder(
             inputRequests = listOf(
                     InputRequest("First, you'll need to identify yourselves. You, on the left... are what is your name?"),
                     InputRequest("And who is your people?", People.values().map(::toPresentationString)),

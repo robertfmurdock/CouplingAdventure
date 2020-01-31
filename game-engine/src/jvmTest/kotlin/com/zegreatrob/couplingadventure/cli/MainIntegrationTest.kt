@@ -52,10 +52,11 @@ class MainIntegrationTest {
                 }
             }
         } verifyAsync { result ->
-            result.last { it != "" }
-                    .assertIsEqualTo(
-                            "Lovely, welcome RoB the Dwarf Mage!"
-                    )
+            result.filterNot { it.isNullOrEmpty() }.takeLast(2)
+                    .assertIsEqualTo(listOf(
+                            "Lovely, welcome RoB the Dwarf Mage!",
+                            "Looks like that's the end!"
+                    ))
         }
     }
 
