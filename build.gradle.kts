@@ -3,7 +3,6 @@ plugins {
     id("se.patrikerdes.use-latest-versions") version "0.2.13"
     id("com.github.ben-manes.versions") version "0.27.0"
     id("net.rdrei.android.buildtimetracker") version "0.11.0"
-    application
 }
 
 repositories {
@@ -11,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":game-engine"))
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -18,10 +18,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-}
-
-application {
-    mainClassName = "com.zegreatrob.couplingadventure.AppKt"
 }
 
 allprojects {

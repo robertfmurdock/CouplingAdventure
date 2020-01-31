@@ -1,12 +1,5 @@
 package com.zegreatrob.couplingadventure
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello world."
-        }
-}
-
-fun main(args: Array<String>) {
-    println(App().greeting)
+fun main() {
+    com.zegreatrob.couplingadventure.cli.main()
 }
