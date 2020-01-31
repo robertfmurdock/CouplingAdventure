@@ -9,7 +9,9 @@ fun main() = commandDispatcher {
 }
 
 fun commandDispatcher(function: MainCommandDispatcher.() -> Unit) {
-    val commandDispatcher = object : MainCommandDispatcher {}
+    val commandDispatcher = object : MainCommandDispatcher {
+        override var exitRequested: Boolean = false
+    }
     commandDispatcher.function()
 }
 

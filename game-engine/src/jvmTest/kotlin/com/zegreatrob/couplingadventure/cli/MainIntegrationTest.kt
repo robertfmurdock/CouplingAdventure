@@ -19,7 +19,12 @@ class MainIntegrationTest {
     fun willWelcomeUserAndStartAdventure() = testAsync {
         setupAsync(object {
         }) exerciseAsync {
-            captureOutput { main() }
+            captureOutput { userOutputStream ->
+                with(userOutputStream) {
+                    println("exit")
+                }
+                main()
+            }
         } verifyAsync { result ->
             result.filter { it != "" }
                     .take(2)
@@ -34,17 +39,16 @@ class MainIntegrationTest {
     fun userWillBeAbleToCreateTheirCharacter() = testAsync {
         setupAsync(object {
         }) exerciseAsync {
-            captureOutput {
+            captureOutput { userOutputStream ->
                 coroutineScope {
-                    val userOutputStream = setupUserOutputStream()
                     launch { main() }
 
                     with(userOutputStream) {
                         println("RoB")
                         println("Dwarf")
                         println("Mage")
+                        close()
                     }
-                    userOutputStream.close()
                 }
             }
         } verifyAsync { result ->
@@ -55,23 +59,25 @@ class MainIntegrationTest {
         }
     }
 
-    private fun setupUserOutputStream(): PrintStream {
-        val inputStream = PipedInputStream()
-        val userOutputStream = PrintStream(PipedOutputStream(inputStream))
-        System.setIn(inputStream)
-        return userOutputStream
-    }
-
 }
 
-private suspend fun captureOutput(work: suspend () -> Unit): List<String> {
+private suspend fun captureOutput(work: suspend (PrintStream) -> Unit): List<String> {
     val byteArrayOutputStream = ByteArrayOutputStream()
     val out = System.out
+
+    val userOutputStream = setupUserOutputStream()
     try {
         System.setOut(PrintStream(byteArrayOutputStream))
-        work()
+        work(userOutputStream)
     } finally {
         System.setOut(out)
     }
     return withContext(Dispatchers.IO) { byteArrayOutputStream.toString("UTF-8")?.lines()!! }
+}
+
+private fun setupUserOutputStream(): PrintStream {
+    val inputStream = PipedInputStream()
+    val userOutputStream = PrintStream(PipedOutputStream(inputStream))
+    System.setIn(inputStream)
+    return userOutputStream
 }

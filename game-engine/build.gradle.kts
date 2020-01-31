@@ -24,7 +24,6 @@ kotlin {
                 implementation("com.zegreatrob.testmints:standard:+")
                 implementation("com.zegreatrob.testmints:minassert:+")
                 implementation("com.zegreatrob.testmints:minspy:+")
-                implementation("com.github.ajalt:clikt:2.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.3")
             }
         }

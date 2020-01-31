@@ -18,7 +18,14 @@ interface CLIGameRunnerPerformer : InputRequestSyntax {
     }
 
     private fun CLICommandBuilder.presentUserPromptsAndRunCommand(): GameSetupState? {
-        val responses = inputRequests.mapIndexed { index, s -> index to s.waitForResponse() }.toMap()
+        val responses = inputRequests.mapIndexed { index, s ->
+
+            if(exitRequested) {
+                return null
+            }
+
+            index to s.waitForResponse()
+        }.toMap()
         val nonNullValues = responses.values.filterNotNull()
 
         return if (nonNullValues.size == responses.values.size) {

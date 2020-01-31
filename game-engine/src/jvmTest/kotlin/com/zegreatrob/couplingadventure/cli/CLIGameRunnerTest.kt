@@ -8,10 +8,11 @@ class CLIGameRunnerTest {
 
     @Test
     fun whenGamePlanIsEmptyWillEndGame() = setup(object : CLIGameRunnerPerformer {
+        override var exitRequested: Boolean = false
+
         val gamePlan = emptyList<(GameState) -> CLICommandBuilder?>()
 
         val userMessages = mutableListOf<String>()
-
         override fun String.sendToUser() = Unit.also { userMessages += this }
 
     }) exercise {

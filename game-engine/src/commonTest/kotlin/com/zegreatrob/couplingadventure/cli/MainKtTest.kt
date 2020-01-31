@@ -7,6 +7,7 @@ class MainKtTest {
 
     @Test
     fun willStartByWelcomingToGameAndPresentingCharacterCreator() = setup(object : MainCommandDispatcher {
+        override var exitRequested: Boolean = false
 
     }) exercise {
 
