@@ -22,30 +22,30 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
                 { state ->
                     if (state is GameSetupState) {
                         if (state.players.isEmpty())
-                            createFirstCharacterBuilder()
+                            createFirstCharacterBuilder(state)
                         else
-                            createSecondCharacterBuilder()
+                            createSecondCharacterBuilder(state)
                     } else
                         null
                 }
         )
 
-    private fun createFirstCharacterBuilder() = CLICommandBuilder(
+    private fun createFirstCharacterBuilder(state: GameSetupState) = CLICommandBuilder(
             inputRequests = listOf(
                     InputRequest("First, you'll need to identify yourselves. You, on the left... are what is your name?"),
                     InputRequest("And who is your people?", People.values().map(::toPresentationString)),
                     InputRequest("Oh, and what is your training?", HeroClass.values().map(::toPresentationString))
             ),
-            commandFunction = ::performCreateCharacterCommand
+            commandFunction = performCreateCharacterCommand(state)
     )
 
-    private fun createSecondCharacterBuilder() = CLICommandBuilder(
+    private fun createSecondCharacterBuilder(state: GameSetupState) = CLICommandBuilder(
             inputRequests = listOf(
                     InputRequest("Alright, how about on the right? Name please!"),
                     InputRequest("And your people is...?", People.values().map(::toPresentationString)),
                     InputRequest("What's your adventuring trade?", HeroClass.values().map(::toPresentationString))
             ),
-            commandFunction = ::performCreateCharacterCommand
+            commandFunction = performCreateCharacterCommand(state)
     )
 
     fun MainCommand.perform() {
@@ -54,15 +54,15 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
         CLIGameRunner(cliGamePlan).perform()
     }
 
-    private fun performCreateCharacterCommand(inputs: List<String>): GameSetupState {
+    private fun performCreateCharacterCommand(state: GameSetupState) = { inputs: List<String> ->
         val (name, people, heroClass) = inputs
         "Lovely, welcome $name the $people $heroClass!".sendToUser()
 
-        return CreateCharacterCommand(
+        CreateCharacterCommand(
                 Player(name),
                 people.toPeople(),
                 heroClass.toHeroClass()
-        ).perform()
+        ).perform(state)
     }
 
 }

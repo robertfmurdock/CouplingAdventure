@@ -6,9 +6,9 @@ data class CreateCharacterCommand(val player: Player, val people: People, val he
 
 interface CreateCharacterCommandDispatcher : CreateCharacterActionDispatcher {
 
-    fun CreateCharacterCommand.perform() = run {
+    fun CreateCharacterCommand.perform(state: GameSetupState) = run {
         val character = createCharacter(player, people, heroClass)
-        GameSetupState(listOf(character))
+        state.copy(state.players + character)
     }
 
     private fun createCharacter(name: Player, people: People, heroClass: HeroClass) = CreateCharacterAction(

@@ -13,7 +13,7 @@ private val peopleToPresentation = mapOf(
 
 fun toPresentationString(people: People) = peopleToPresentation.getValue(people)
 
-fun String.toPeople(): People = peopleToPresentation.entries.find { (people, value) ->
+fun String.toPeople(): People = peopleToPresentation.entries.find { (_, value) ->
     value == this
 }!!.key
 
@@ -26,6 +26,6 @@ private val heroClassToPresentation = mapOf(
 
 fun toPresentationString(heroClass: HeroClass) = heroClassToPresentation.getValue(heroClass)
 
-fun String.toHeroClass(): HeroClass = heroClassToPresentation.entries.find { (heroClass, value) ->
+fun String.toHeroClass(): HeroClass = heroClassToPresentation.entries.find { (_, value) ->
     value == this
 }!!.key

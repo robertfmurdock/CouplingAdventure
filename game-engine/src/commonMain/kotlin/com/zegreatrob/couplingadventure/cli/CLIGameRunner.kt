@@ -31,7 +31,7 @@ interface CLIGameRunnerPerformer : InputRequestSyntax, ExitSyntax {
     }
 
 
-    private fun CLICommandBuilder.presentUserPromptsAndRunCommand(): GameSetupState? {
+    private fun CLICommandBuilder.presentUserPromptsAndRunCommand(): GameState? {
         val responses = inputRequests.mapIndexed { index, s ->
 
             if (exitRequested) {
@@ -54,5 +54,5 @@ interface CLIGameRunnerPerformer : InputRequestSyntax, ExitSyntax {
 
 data class CLICommandBuilder(
         val inputRequests: List<InputRequest>,
-        val commandFunction: (inputs: List<String>) -> GameSetupState
+        val commandFunction: (inputs: List<String>) -> GameState
 )

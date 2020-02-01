@@ -17,7 +17,7 @@ class CreateCharacterCommandTest {
         val givenHeroClass = HeroClass.Mage
     }) exercise {
         CreateCharacterCommand(givenName, givenPeople, givenHeroClass)
-                .perform()
+                .perform(GameSetupState())
     } verify { result ->
         result.assertIsEqualTo(
                 GameSetupState(listOf(Character(
@@ -27,6 +27,24 @@ class CreateCharacterCommandTest {
                         givenHeroClass.characterSheet
                 )))
         )
+    }
+
+    @Test
+    fun whenThereIsAnExistingPartyWillAddNewCharacterToIt() = setup(object : CreateCharacterCommandDispatcher {
+        val givenName = Player("Tim")
+        val givenPeople = People.Human
+        val givenHeroClass = HeroClass.Mage
+
+        val initialState = GameSetupState(listOf(stubCharacter()))
+    }) exercise {
+        CreateCharacterCommand(givenName, givenPeople, givenHeroClass)
+                .perform(initialState)
+    } verify { result ->
+        result.players
+                .assertIsEqualTo(
+                        initialState.players +
+                                Character(givenName, givenPeople, givenHeroClass, givenHeroClass.characterSheet)
+                )
     }
 
 }
