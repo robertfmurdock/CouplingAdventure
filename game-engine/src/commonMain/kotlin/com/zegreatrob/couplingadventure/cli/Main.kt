@@ -2,7 +2,6 @@ package com.zegreatrob.couplingadventure.cli
 
 import com.zegreatrob.couplingadventure.engine.HeroClass
 import com.zegreatrob.couplingadventure.engine.People
-import com.zegreatrob.couplingadventure.engine.People.valueOf
 import com.zegreatrob.couplingadventure.engine.Player
 
 fun main() = commandDispatcher { MainCommand.perform() }
@@ -21,10 +20,13 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
     val cliGamePlan: List<(GameState) -> CLICommandBuilder?>
         get() = listOf(
                 { state ->
-                    when (state) {
-                        GameSetupState() -> createFirstCharacterBuilder()
-                        else -> null
-                    }
+                    if (state is GameSetupState) {
+                        if (state.players.isEmpty())
+                            createFirstCharacterBuilder()
+                        else
+                            createSecondCharacterBuilder()
+                    } else
+                        null
                 }
         )
 
@@ -33,6 +35,15 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
                     InputRequest("First, you'll need to identify yourselves. You, on the left... are what is your name?"),
                     InputRequest("And who is your people?", People.values().map(::toPresentationString)),
                     InputRequest("Oh, and what is your training?", HeroClass.values().map(::toPresentationString))
+            ),
+            commandFunction = ::performCreateCharacterCommand
+    )
+
+    private fun createSecondCharacterBuilder() = CLICommandBuilder(
+            inputRequests = listOf(
+                    InputRequest("Alright, how about on the right? Name please!"),
+                    InputRequest("And your people is...?", People.values().map(::toPresentationString)),
+                    InputRequest("What's your adventuring trade?", HeroClass.values().map(::toPresentationString))
             ),
             commandFunction = ::performCreateCharacterCommand
     )
@@ -49,8 +60,8 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
 
         return CreateCharacterCommand(
                 Player(name),
-                valueOf(people),
-                HeroClass.valueOf(heroClass)
+                people.toPeople(),
+                heroClass.toHeroClass()
         ).perform()
     }
 

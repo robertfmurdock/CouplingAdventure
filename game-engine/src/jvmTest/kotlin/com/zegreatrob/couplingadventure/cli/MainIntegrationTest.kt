@@ -20,9 +20,7 @@ class MainIntegrationTest {
         setupAsync(object {
         }) exerciseAsync {
             captureOutput { userOutputStream ->
-                with(userOutputStream) {
-                    println("exit")
-                }
+                userOutputStream.println("exit")
                 main()
             }
         } verifyAsync { result ->
@@ -47,16 +45,14 @@ class MainIntegrationTest {
                         println("RoB")
                         println("Dwarf")
                         println("Mage")
-                        close()
+                        println("exit")
                     }
                 }
             }
         } verifyAsync { result ->
-            result.filterNot { it.isNullOrEmpty() }.takeLast(2)
-                    .assertIsEqualTo(listOf(
-                            "Lovely, welcome RoB the Dwarf Mage!",
-                            "Looks like that's the end!"
-                    ))
+            result.filterNot { it.isEmpty() }.takeLast(3)
+                    .first()
+                    .assertIsEqualTo("Lovely, welcome RoB the Dwarf Mage!")
         }
     }
 
@@ -72,6 +68,9 @@ private suspend fun captureOutput(work: suspend (PrintStream) -> Unit): List<Str
         work(userOutputStream)
     } finally {
         System.setOut(out)
+    }
+    with(userOutputStream) {
+        close()
     }
     return withContext(Dispatchers.IO) { byteArrayOutputStream.toString("UTF-8")?.lines()!! }
 }
