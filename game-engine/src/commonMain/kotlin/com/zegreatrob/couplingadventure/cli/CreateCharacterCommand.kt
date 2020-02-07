@@ -8,7 +8,7 @@ interface CreateCharacterCommandDispatcher : CreateCharacterActionDispatcher {
 
     fun CreateCharacterCommand.perform(state: GameSetupState) = run {
         val character = createCharacter(player, people, heroClass)
-        state.copy(state.players + character)
+        state.copy(players = state.players + character)
     }
 
     private fun createCharacter(name: Player, people: People, heroClass: HeroClass) = CreateCharacterAction(
