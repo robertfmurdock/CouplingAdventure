@@ -1,5 +1,8 @@
 package com.zegreatrob.couplingadventure.cli
 
+import com.zegreatrob.couplingadventure.GamePlan
+import com.zegreatrob.couplingadventure.Transition.AddCharacter
+import com.zegreatrob.couplingadventure.Transition.StartAdventure
 import com.zegreatrob.couplingadventure.engine.HeroClass
 import com.zegreatrob.couplingadventure.engine.People
 import com.zegreatrob.couplingadventure.engine.Player
@@ -20,15 +23,23 @@ interface MainCommandDispatcher : OutputSyntax, InputRequestSyntax, CLIGameRunne
     val cliGamePlan: List<(GameState) -> CLICommandBuilder?>
         get() = listOf(
                 { state ->
-                    if (state is GameSetupState) {
-                        if (state.players.isEmpty())
-                            createFirstCharacterBuilder(state)
-                        else
-                            createSecondCharacterBuilder(state)
-                    } else
-                        null
+                    val transitions = GamePlan.nextTransition(state)
+                    when (transitions.first()) {
+                        AddCharacter -> chooseCharacterBuilder(state)
+                        StartAdventure -> startAdventureBuilder(state)
+                    }
                 }
         )
+
+    private fun chooseCharacterBuilder(state: GameState) = if (state is GameSetupState) {
+        if (state.players.isEmpty())
+            createFirstCharacterBuilder(state)
+        else
+            createSecondCharacterBuilder(state)
+    } else
+        null
+
+    private fun startAdventureBuilder(state: GameState): CLICommandBuilder? = null
 
     private fun createFirstCharacterBuilder(state: GameSetupState) = CLICommandBuilder(
             inputRequests = listOf(

@@ -13,8 +13,8 @@ class GamePlanTest {
         val state = GameSetupState()
     }) exercise {
         GamePlan.nextTransition(state)
-    } verify { result: Transition ->
-        result.assertIsEqualTo(Transition.Setup)
+    } verify { result: List<Transition> ->
+        result.assertIsEqualTo(listOf(Transition.AddCharacter, Transition.AddCharacter))
     }
 
     @Test
@@ -22,8 +22,8 @@ class GamePlanTest {
         val state = GameSetupState(players = listOf(stubCharacter()))
     }) exercise {
         GamePlan.nextTransition(state)
-    } verify { result: Transition ->
-        result.assertIsEqualTo(Transition.Setup)
+    } verify { result ->
+        result.assertIsEqualTo(listOf(Transition.AddCharacter))
     }
 
     @Test
@@ -31,8 +31,8 @@ class GamePlanTest {
         val state = GameSetupState(players = listOf(stubCharacter(), stubCharacter()))
     }) exercise {
         GamePlan.nextTransition(state)
-    } verify { result: Transition ->
-        result.assertIsEqualTo(Transition.StartAdventure)
+    } verify { result ->
+        result.assertIsEqualTo(listOf(Transition.StartAdventure))
     }
 
 }
