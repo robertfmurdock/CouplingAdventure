@@ -1,7 +1,7 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.61"
-    id("se.patrikerdes.use-latest-versions") version "0.2.13"
-    id("com.github.ben-manes.versions") version "0.27.0"
+    id("org.jetbrains.kotlin.jvm") version "1.3.72"
+    id("se.patrikerdes.use-latest-versions") version "0.2.14"
+    id("com.github.ben-manes.versions") version "0.28.0"
     id("net.rdrei.android.buildtimetracker") version "0.11.0"
 }
 

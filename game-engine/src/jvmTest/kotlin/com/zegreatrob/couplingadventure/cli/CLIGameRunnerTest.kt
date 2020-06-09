@@ -28,17 +28,16 @@ class CLIGameRunnerTest {
     fun willHandleCommandBuildersWithMultipleChoice() = setup(object : CLIGameRunnerPerformer {
         override var exitRequested: Boolean = false
 
-        val commandBuilderSpy = SpyData<List<String>, GameSetupState>()
         val inputRequest = InputRequest("Select one", listOf("A", "B", "C"))
         val gamePlan: List<(GameState) -> CLICommandBuilder?> = listOf { _ ->
-            CLICommandBuilder(listOf(inputRequest), commandBuilderSpy::spyFunction)
+            CLICommandBuilder(listOf(inputRequest)) { GameSetupState(emptyList()) }
         }
 
         val askSpy = SpyData<InputRequest, String>().apply {
             spyWillReturn(listOf("C"))
         }
 
-        override fun InputRequest.ask() = askSpy.spyFunction(this)
+        override fun InputRequest.ask() = askSpy.spyFunction(this).also { exitRequested = true }
 
         val userMessages = mutableListOf<String>()
         override fun String.sendToUser() = Unit.also { userMessages += this }
